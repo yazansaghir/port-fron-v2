@@ -1,0 +1,162 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Canonical public-site palette (single source of truth).
+  Dashboard may store legacy colour fields; the live site reads these tokens only.
+  Use color-mix(in srgb, var(--color-*) …) for alpha — tokens stay hex.
+*/
+:root {
+  --color-primary: #7c6cff;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #23c4d8;
+  /* Tertiary wash for gradients (complements primary + secondary) */
+  --color-accent: #38bdf8;
+  --color-bg: #0a1020;
+  --color-text: #f4f7ff;
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --color-text-muted: #94a3b8;
+  --color-border: #334155;
+  --color-surface: #1e293b;
+  --color-surface-2: #334155;
+
+  /* Motion tokens (public UI); zeroed under prefers-reduced-motion below */
+  --motion-duration-fast: 180ms;
+  --motion-duration: 280ms;
+  --motion-duration-slow: 400ms;
+  --motion-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-duration-fast: 0ms;
+    --motion-duration: 0ms;
+    --motion-duration-slow: 0ms;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  #root {
+    @apply min-h-dvh;
+  }
+}
+
+/* Utilities: hex tokens + color-mix for transparency */
+.glass {
+  background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid color-mix(in srgb, var(--color-border) 50%, transparent);
+}
+
+.glow-primary {
+  box-shadow:
+    0 0 20px color-mix(in srgb, var(--color-primary) 30%, transparent),
+    0 0 40px color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes scroll-pulse {
+  0%,
+  100% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+.animate-scroll-pulse {
+  animation: scroll-pulse 1.5s ease-in-out infinite;
+  transform-origin: top;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-reverse {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-marquee {
+  animation: marquee linear infinite;
+}
+
+.animate-marquee-reverse {
+  animation: marquee-reverse linear infinite;
+}
+
+.animate-marquee:hover,
+.animate-marquee-reverse:hover {
+  animation-play-state: paused;
+}
+
+@layer utilities {
+  /**
+   * Shared surface transitions for cards (border, shadow). Transform comes from
+   * .motion-hover-lift where used. Prefer opacity/transform for paint cost.
+   */
+  .motion-card-surface {
+    transition-property: transform, box-shadow, border-color;
+    transition-duration: var(--motion-duration);
+    transition-timing-function: var(--motion-ease-out);
+  }
+
+  /** Inline text / chrome: color and underline only */
+  .motion-link-soft {
+    transition-property: color, opacity, text-decoration-color;
+    transition-duration: var(--motion-duration-fast);
+    transition-timing-function: var(--motion-ease-out);
+  }
+
+  /**
+   * Subtle hover lift (transform only). Disabled entirely when reduced motion is on,
+   * not merely instant — avoids unnecessary spatial motion.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    .motion-hover-lift:hover {
+      transform: translateY(-2px);
+    }
+
+    .motion-hover-lift:active {
+      transform: translateY(0) scale(0.98);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .motion-card-surface {
+      transition-duration: 0ms;
+    }
+
+    .motion-hover-lift:active {
+      transform: scale(0.98);
+    }
+  }
+}
