@@ -1,5 +1,5 @@
-# Logs
-logs
+# Log output at repo root only (bare "logs" ignores src/features/logs and breaks deploys)
+/logs
 *.log
 npm-debug.log*
 yarn-debug.log*
