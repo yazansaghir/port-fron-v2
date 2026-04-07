@@ -1,7 +1,7 @@
-import type { CSSProperties, ElementType, ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 type MotionCardProps = {
-  as?: ElementType;
+  as?: keyof HTMLElementTagNameMap;
   /** Lift + shadow on hover; set false for static surfaces. */
   interactive?: boolean;
   className?: string;
