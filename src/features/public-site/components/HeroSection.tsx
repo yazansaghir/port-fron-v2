@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion';
 
 import { GradientText } from '@/features/public-site/components/GradientText';
-import { HeroVisualPlaceholder } from '@/features/public-site/components/HeroVisualPlaceholder';
+import { HeroRobotModel } from '@/features/public-site/components/HeroRobotModel';
 import {
   MOTION_DURATION_HERO_CHILD_S,
   MOTION_EASE,
@@ -146,7 +146,7 @@ export function HeroSection({
             ease: MOTION_EASE,
           }}
         >
-          <HeroVisualPlaceholder />
+          <HeroRobotModel />
         </motion.div>
       </div>
     </section>
