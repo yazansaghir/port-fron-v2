@@ -37,8 +37,8 @@ function Model() {
       <Center>
         <primitive
           object={scene}
-          scale={isMobile ? 0.95 : 1.2}
-          position={isMobile ? [0, -0.2, 0] : [0, 0, 0]}
+          scale={isMobile ? 1.3 : 1.2}
+          position={isMobile ? [0, -2.2, 0] : [0, -1.5, 0]}
         />
       </Center>
     </group>
@@ -49,7 +49,7 @@ useGLTF.preload('/model/robot_playground.glb')
 
 export function HeroRobotModel() {
   return (
-    <div className="w-full h-[320px] sm:h-[420px] md:h-[520px] lg:h-[620px]">
+    <div className="w-full h-[320px] sm:h-[420px] md:h-[520px] lg:h-[620px] ">
       <Canvas camera={{ position: [0, 1.5, 6], fov: 45 }}>
         <ambientLight intensity={1.5} />
         <directionalLight position={[5, 5, 5]} intensity={2} />

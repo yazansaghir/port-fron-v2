@@ -86,7 +86,7 @@ export function HeroSection({
       <div className="grid min-h-dvh w-full grid-cols-1 items-center md:grid-cols-12 md:gap-x-10 lg:gap-x-16 xl:gap-x-20">
         {/* Copy column */}
         <motion.div
-          className="relative z-10 flex flex-col justify-center py-28 md:col-span-7 md:py-24 lg:col-span-6 xl:col-span-6 pl-5"
+          className="relative z-10 flex flex-col justify-center py-16 md:col-span-7 md:py-24 lg:col-span-6 xl:col-span-6 pl-5"
           variants={containerVariants}
           initial={reduceMotion ? false : 'hidden'}
           animate={reduceMotion ? false : 'visible'}
@@ -122,22 +122,11 @@ export function HeroSection({
               {secondaryCta.label}
             </PublicButton>
           </motion.div>
-
-          <motion.div
-            className="mt-16 flex items-center gap-3"
-            variants={itemVariants}
-          >
-            <span
-              className="h-10 w-px bg-gradient-to-b from-primary/60 to-transparent"
-              aria-hidden
-            />
-            <span className="font-mono text-xs uppercase tracking-widest text-muted/60">Scroll</span>
-          </motion.div>
         </motion.div>
 
         {/* Visual column */}
         <motion.div
-          className="relative z-[1] hidden md:col-span-5 md:flex md:min-h-[min(100dvh,56rem)] md:items-center md:justify-center lg:col-span-6 xl:col-span-6 lg:justify-end"
+          className="relative z-[1] flex w-full items-center justify-center py-8 md:col-span-5 md:min-h-[min(100dvh,56rem)] md:pb-0 lg:col-span-6 lg:justify-end xl:col-span-6"
           initial={reduceMotion ? false : { opacity: 0, y: 10 }}
           animate={reduceMotion ? false : { opacity: 1, y: 0 }}
           transition={{
