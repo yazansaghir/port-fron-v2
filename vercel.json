@@ -6,7 +6,7 @@
   "rewrites": [{ "source": "/((?!api/).*)", "destination": "/index.html" },
     {
       "source": "/api/:path*",
-      "destination": "https://yazan-api-portfolio.vercel.app/api/:path*" 
+      "destination": "https://port-back-git-analyze-github-yazansaghirs-projects.vercel.app/api/:path*" 
     }
   ]
 }
