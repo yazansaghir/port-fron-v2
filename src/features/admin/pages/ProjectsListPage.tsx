@@ -1,6 +1,12 @@
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
+import {
+  buildProjectCreatePayload,
+  QUICK_IMPORT_FORCED_STATUS,
+} from '@/features/admin/components/projects/githubImportPayload';
 import { ProjectsTable } from '@/features/admin/components/projects/ProjectsTable';
 import { AdminButton } from '@/features/admin/components/ui/AdminButton';
 import { AdminCard } from '@/features/admin/components/ui/AdminCard';
@@ -11,13 +17,45 @@ import {
   AdminTableBody,
   AdminTableHead,
 } from '@/features/admin/components/ui/AdminTable';
+import { analyzeGithubProject, createProject, patchProjectStatus } from '@/features/projects/api/projects.api';
 import { useAdminProjects } from '@/features/projects/hooks/useAdminProjects';
+import { projectsKeys } from '@/features/projects/query-keys';
 import { getDisplayMessage } from '@/shared/api/mapApiError';
 
 const TABLE_COLUMNS = ['Title', 'Slug', 'Status', 'Order', 'Updated', 'Actions'];
 
 export default function ProjectsListPage() {
+  const [repoUrl, setRepoUrl] = useState('');
+  const [importError, setImportError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { data, isPending, isError, error, refetch } = useAdminProjects({ limit: 100 });
+  const analyzeAndCreateDraft = useMutation({
+    mutationFn: async () => {
+      const trimmedRepoUrl = repoUrl.trim();
+      if (!trimmedRepoUrl) {
+        throw new Error('Please enter a GitHub repository URL.');
+      }
+
+      const analysis = await analyzeGithubProject({ repoUrl: trimmedRepoUrl });
+      const draft = analysis.draft ?? {};
+      const createPayload = buildProjectCreatePayload(draft, trimmedRepoUrl);
+
+      const created = await createProject(createPayload);
+      await patchProjectStatus(created.id, { status: QUICK_IMPORT_FORCED_STATUS });
+      await queryClient.invalidateQueries({ queryKey: projectsKeys.adminList() });
+      return created.id;
+    },
+    onMutate: () => {
+      setImportError(null);
+    },
+    onSuccess: (projectId) => {
+      navigate(`/admin/projects/${projectId}/edit`);
+    },
+    onError: (err) => {
+      setImportError(getDisplayMessage(err, 'Failed to analyze repository and create draft.'));
+    },
+  });
 
   return (
     <motion.div
@@ -43,6 +81,37 @@ export default function ProjectsListPage() {
           New project
         </Link>
       </div>
+
+      <AdminCard className="p-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+          <div className="flex-1">
+            <label htmlFor="github-repo-url" className="mb-1 block text-xs font-medium text-foreground/70">
+              GitHub repository URL
+            </label>
+            <input
+              id="github-repo-url"
+              type="url"
+              value={repoUrl}
+              onChange={(e) => setRepoUrl(e.target.value)}
+              disabled={analyzeAndCreateDraft.isPending}
+              placeholder="https://github.com/owner/repo"
+              className="w-full rounded-lg border border-foreground/15 bg-background px-3 py-2 text-sm text-foreground outline-none transition focus:border-primary focus:ring-1 focus:ring-primary/30 disabled:cursor-not-allowed disabled:opacity-60"
+            />
+          </div>
+          <AdminButton
+            onClick={() => analyzeAndCreateDraft.mutate()}
+            disabled={analyzeAndCreateDraft.isPending}
+            className="h-10 px-4"
+          >
+            {analyzeAndCreateDraft.isPending ? 'Analyzing…' : 'Analyze & Create Draft'}
+          </AdminButton>
+        </div>
+        {importError && (
+          <p className="mt-3 rounded-lg border border-red-500/25 bg-red-500/10 px-3 py-2 text-sm text-foreground" role="alert">
+            {importError}
+          </p>
+        )}
+      </AdminCard>
 
       {/* Error */}
       {isError && (

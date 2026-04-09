@@ -1,6 +1,8 @@
 import type {
   AdminProject,
   AdminProjectsPage,
+  AnalyzeGithubProjectRequest,
+  AnalyzeGithubProjectResponse,
   CreateProjectRequest,
   PatchProjectStatusRequest,
   PublishedProjectDetail,
@@ -50,6 +52,16 @@ export async function createProject(body: CreateProjectRequest): Promise<AdminPr
   return apiRequest<AdminProject>({
     method: 'POST',
     url: '/admin/projects',
+    data: body,
+  });
+}
+
+export async function analyzeGithubProject(
+  body: AnalyzeGithubProjectRequest,
+): Promise<AnalyzeGithubProjectResponse> {
+  return apiRequest<AnalyzeGithubProjectResponse>({
+    method: 'POST',
+    url: '/admin/projects/analyze-github',
     data: body,
   });
 }

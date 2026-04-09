@@ -68,6 +68,29 @@ export type CreateProjectRequest = {
 
 export type UpdateProjectRequest = Partial<CreateProjectRequest>;
 
+export type AnalyzeGithubProjectRequest = {
+  repoUrl: string;
+};
+
+export type GithubGeneratedProjectDraft = {
+  title?: string;
+  slug?: string;
+  shortSummary?: string;
+  content?: string;
+  githubUrl?: string;
+  liveUrl?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  thumbnailUrl?: string;
+  techStack?: string[];
+};
+
+export type AnalyzeGithubProjectResponse = {
+  repoUrl: string;
+  repositoryData: Record<string, unknown>;
+  draft: GithubGeneratedProjectDraft;
+};
+
 export type ReorderProjectsRequest = {
   items: Array<{ id: string; orderIndex: number }>;
 };
