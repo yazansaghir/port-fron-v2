@@ -39,7 +39,7 @@ function ExternalIcon({ type }: { type: 'github' | 'live' }) {
 }
 
 const linkBase =
-  'inline-flex items-center gap-2.5 rounded-full border px-5 py-2.5 text-sm font-semibold tracking-wide shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] transition-[border-color,background-color,color,box-shadow] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background';
+  'inline-flex items-center gap-2.5 rounded-full border px-5 py-2.5 text-sm font-semibold tracking-wide shadow-[inset_0_1px_0_0_color-mix(in_srgb,var(--color-border)_40%,transparent)] transition-[border-color,background-color,color,box-shadow] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background';
 
 export function ExternalLinks({ githubUrl, liveUrl }: ExternalLinksProps) {
   if (!githubUrl && !liveUrl) return null;
@@ -51,7 +51,7 @@ export function ExternalLinks({ githubUrl, liveUrl }: ExternalLinksProps) {
           href={githubUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className={`${linkBase} border-white/[0.12] bg-foreground/[0.06] text-foreground/85 backdrop-blur-md hover:border-primary/40 hover:bg-primary/[0.1] hover:text-primary`}
+          className={`${linkBase} border-border/50 bg-foreground/[0.06] text-foreground/85 backdrop-blur-md hover:border-primary/40 hover:bg-primary/[0.1] hover:text-primary`}
         >
           <ExternalIcon type="github" />
           GitHub
@@ -62,7 +62,7 @@ export function ExternalLinks({ githubUrl, liveUrl }: ExternalLinksProps) {
           href={liveUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className={`${linkBase} border-primary/35 bg-gradient-to-br from-primary to-secondary text-white shadow-[0_0_36px_-10px_color-mix(in_srgb,var(--color-primary)_55%,transparent),inset_0_1px_0_0_rgba(255,255,255,0.15)] hover:opacity-95`}
+          className={`${linkBase} border-primary/35 bg-gradient-to-br from-primary to-secondary text-primary-foreground shadow-[0_0_36px_-10px_color-mix(in_srgb,var(--color-primary)_55%,transparent),inset_0_1px_0_0_color-mix(in_srgb,var(--color-primary-foreground)_18%,transparent)] hover:opacity-95`}
         >
           <ExternalIcon type="live" />
           Live demo

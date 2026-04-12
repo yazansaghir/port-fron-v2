@@ -23,7 +23,7 @@ export function ProjectGrid({ projects, presentation = 'default' }: ProjectGridP
 
   if (projects.length === 0) {
     return (
-      <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-[color-mix(in_srgb,var(--color-surface)_65%,transparent)] px-10 py-16 text-center shadow-xl shadow-black/20 backdrop-blur-[18px] md:px-14 md:py-20">
+      <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-[color-mix(in_srgb,var(--color-surface)_65%,transparent)] px-10 py-16 text-center shadow-xl shadow-[0_20px_56px_-20px_color-mix(in_srgb,var(--color-text)_24%,transparent)] backdrop-blur-[18px] md:px-14 md:py-20">
         <div
           className="pointer-events-none absolute inset-0 opacity-50"
           style={{

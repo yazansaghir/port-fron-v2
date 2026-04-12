@@ -54,7 +54,7 @@ export default function ProjectDetailPage() {
     return (
       <PublicMarketingPageFrame>
         <div className="flex min-h-[50vh] items-center justify-center py-16">
-          <div className="relative max-w-lg overflow-hidden rounded-3xl border border-white/10 bg-[color-mix(in_srgb,var(--color-surface)_70%,transparent)] px-10 py-12 text-center shadow-2xl shadow-black/25 backdrop-blur-[20px]">
+          <div className="relative max-w-lg overflow-hidden rounded-3xl border border-border/50 bg-[color-mix(in_srgb,var(--color-surface)_70%,transparent)] px-10 py-12 text-center shadow-2xl shadow-[0_25px_80px_-24px_color-mix(in_srgb,var(--color-text)_28%,transparent)] backdrop-blur-[20px]">
             <div
               className="pointer-events-none absolute inset-0 opacity-50"
               style={{
@@ -92,7 +92,7 @@ export default function ProjectDetailPage() {
   return (
     <PublicMarketingPageFrame>
       <article className="pb-24 md:pb-32">
-        <div className="flex flex-col gap-6 border-b border-white/[0.08] pb-8 pt-4 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
+        <div className="flex flex-col gap-6 border-b border-border/45 pb-8 pt-4 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
           <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted">
             <Link to="/" className="transition hover:text-primary">
               Home
@@ -129,13 +129,13 @@ export default function ProjectDetailPage() {
               </p>
             ) : null}
 
-            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-white/[0.06] pt-8 font-mono text-xs uppercase tracking-[0.16em] text-muted">
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-border/40 pt-8 font-mono text-xs uppercase tracking-[0.16em] text-muted">
               <span>
                 <span className="text-foreground/40">Updated </span>
                 {updatedLabel}
               </span>
               {createdLabel !== updatedLabel ? (
-                <span className="hidden h-3 w-px bg-white/10 sm:block" aria-hidden />
+                <span className="hidden h-3 w-px bg-border/60 sm:block" aria-hidden />
               ) : null}
               {createdLabel !== updatedLabel ? (
                 <span>
@@ -155,7 +155,7 @@ export default function ProjectDetailPage() {
           <ProjectGallery assets={project.assets} />
         </div>
 
-        <div className="mx-auto mt-20 max-w-public border-t border-white/[0.08] pt-12 md:mt-24 md:pt-14">
+        <div className="mx-auto mt-20 max-w-public border-t border-border/45 pt-12 md:mt-24 md:pt-14">
           <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
             <div>
               <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">Next</p>

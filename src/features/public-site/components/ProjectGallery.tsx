@@ -5,7 +5,7 @@ type ProjectGalleryProps = {
 };
 
 const frame =
-  'overflow-hidden rounded-3xl border border-white/[0.08] bg-[color-mix(in_srgb,var(--color-surface)_55%,transparent)] shadow-[0_24px_56px_-28px_rgba(0,0,0,0.55),inset_0_1px_0_0_rgba(255,255,255,0.06)] ring-1 ring-inset ring-white/[0.05] backdrop-blur-[12px]';
+  'overflow-hidden rounded-3xl border border-border/50 bg-[color-mix(in_srgb,var(--color-surface)_55%,transparent)] shadow-[0_24px_56px_-28px_color-mix(in_srgb,var(--color-text)_32%,transparent),inset_0_1px_0_0_color-mix(in_srgb,var(--color-border)_45%,transparent)] ring-1 ring-inset ring-border/35 backdrop-blur-[12px]';
 
 function GalleryMedia({
   asset,
@@ -21,7 +21,7 @@ function GalleryMedia({
     return (
       <div className={`${frame} p-3 sm:p-4`}>
         <div
-          className={`relative overflow-hidden ${innerRadius} bg-black/40 ring-1 ring-inset ring-white/[0.06]`}
+          className={`relative overflow-hidden ${innerRadius} bg-overlay-scrim ring-1 ring-inset ring-border/40`}
         >
           <video
             src={asset.assetUrl}

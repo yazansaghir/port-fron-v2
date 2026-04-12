@@ -6,15 +6,15 @@
 export const labelClass = 'block text-sm font-medium text-foreground/90';
 
 export const inputClass =
-  'mt-1 w-full rounded-lg border border-foreground/15 bg-background px-3 py-2 text-sm text-foreground outline-none transition placeholder:text-foreground/40 focus:border-primary focus:ring-1 focus:ring-primary/30 disabled:cursor-not-allowed disabled:opacity-50';
+  'mt-1 w-full rounded-lg border border-foreground/15 bg-background px-3 py-2 text-sm text-foreground outline-none transition placeholder:text-foreground/40 focus:border-border-strong focus:ring-1 focus:ring-focus-ring/35 disabled:cursor-not-allowed disabled:opacity-50';
 
 export const textareaClass =
-  'mt-1 w-full rounded-lg border border-foreground/15 bg-background px-3 py-2 text-sm text-foreground outline-none transition placeholder:text-foreground/40 focus:border-primary focus:ring-1 focus:ring-primary/30 disabled:cursor-not-allowed disabled:opacity-50 resize-y min-h-[120px]';
+  'mt-1 w-full rounded-lg border border-foreground/15 bg-background px-3 py-2 text-sm text-foreground outline-none transition placeholder:text-foreground/40 focus:border-border-strong focus:ring-1 focus:ring-focus-ring/35 disabled:cursor-not-allowed disabled:opacity-50 resize-y min-h-[120px]';
 
-export const fieldErrorClass = 'mt-1 text-xs text-red-600 dark:text-red-400';
+export const fieldErrorClass = 'mt-1 text-xs text-status-danger';
 
 export const generalErrorClass =
-  'rounded-lg border border-red-500/25 bg-red-500/10 px-3 py-2 text-sm text-foreground';
+  'rounded-lg border border-status-danger/25 bg-status-danger/10 px-3 py-2 text-sm text-foreground';
 
 export const successClass =
-  'rounded-lg border border-emerald-500/25 bg-emerald-500/10 px-3 py-2 text-sm text-foreground';
+  'rounded-lg border border-status-success/25 bg-status-success/10 px-3 py-2 text-sm text-foreground';

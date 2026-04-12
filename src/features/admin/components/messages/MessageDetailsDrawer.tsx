@@ -54,7 +54,7 @@ export function MessageDetailsDrawer({ message, onClose, onReadToggled }: Props)
     >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/30"
+        className="absolute inset-0 bg-overlay-scrim"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -123,7 +123,7 @@ export function MessageDetailsDrawer({ message, onClose, onReadToggled }: Props)
         {/* Footer actions */}
         <div className="border-t border-foreground/10 px-5 py-4 space-y-2">
           {mutationErrorMsg && (
-            <p className="rounded-md bg-red-500/10 px-3 py-2 text-xs text-red-600 dark:text-red-400">
+            <p className="rounded-md bg-status-danger/10 px-3 py-2 text-xs text-status-danger">
               {mutationErrorMsg}
             </p>
           )}

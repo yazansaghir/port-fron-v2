@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
-type Variant = 'primary' | 'secondary' | 'ghost' | 'destructive' | 'soft';
+type Variant = 'primary' | 'secondary' | 'ghost' | 'destructive' | 'soft' | 'success';
 type Size = 'sm' | 'md';
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -14,7 +14,8 @@ const variantClasses: Record<Variant, string> = {
   secondary:
     'border border-foreground/15 text-foreground/80 hover:bg-foreground/5 disabled:opacity-50',
   ghost: 'bg-foreground/8 text-foreground hover:bg-foreground/12 disabled:opacity-60',
-  destructive: 'bg-red-600 text-white hover:bg-red-700 disabled:opacity-70',
+  destructive: 'bg-status-danger text-primary-foreground hover:opacity-90 disabled:opacity-70',
+  success: 'bg-status-success text-primary-foreground hover:opacity-90 disabled:opacity-60',
   soft: 'bg-primary/10 text-primary hover:bg-primary/20 disabled:opacity-60',
 };
 

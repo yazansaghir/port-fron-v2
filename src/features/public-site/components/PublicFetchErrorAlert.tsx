@@ -12,7 +12,7 @@ export function PublicFetchErrorAlert({ message, radius }: PublicFetchErrorAlert
   return (
     <div
       role="alert"
-      className={`${radiusClass[radius]} border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-foreground`}
+      className={`${radiusClass[radius]} border border-status-danger/25 bg-status-danger/10 px-4 py-3 text-sm text-foreground`}
     >
       {message}
     </div>

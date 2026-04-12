@@ -25,7 +25,7 @@ export function GuestRoute({ children }: GuestRouteProps) {
   return (
     <>
       {isError ? (
-        <div className="mb-4 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm text-foreground">
+        <div className="mb-4 rounded-lg border border-status-warning/30 bg-status-warning/10 px-3 py-2 text-sm text-foreground">
           <p>{getDisplayMessage(error, 'Could not verify session.')}</p>
           <button
             type="button"

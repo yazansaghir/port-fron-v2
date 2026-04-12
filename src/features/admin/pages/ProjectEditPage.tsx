@@ -108,7 +108,7 @@ export default function ProjectEditPage() {
 
       {/* Status mutation error */}
       {statusMutation.isError && (
-        <p className="rounded-lg border border-red-500/25 bg-red-500/10 px-3 py-2 text-sm text-foreground" role="alert">
+        <p className="rounded-lg border border-status-danger/25 bg-status-danger/10 px-3 py-2 text-sm text-foreground" role="alert">
           {getDisplayMessage(statusMutation.error, 'Failed to update status.')}
         </p>
       )}
@@ -118,7 +118,7 @@ export default function ProjectEditPage() {
         <p
           role="status"
           aria-live="polite"
-          className="rounded-lg border border-emerald-500/25 bg-emerald-500/10 px-3 py-2 text-sm text-foreground"
+          className="rounded-lg border border-status-success/25 bg-status-success/10 px-3 py-2 text-sm text-foreground"
         >
           Changes saved successfully.
         </p>

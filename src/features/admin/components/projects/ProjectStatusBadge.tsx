@@ -11,11 +11,11 @@ const STATUS_CONFIG: Record<ProjectStatus, { label: string; className: string }>
   },
   PUBLISHED: {
     label: 'Published',
-    className: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400',
+    className: 'bg-status-success/15 text-status-success',
   },
   ARCHIVED: {
     label: 'Archived',
-    className: 'bg-amber-500/15 text-amber-700 dark:text-amber-400',
+    className: 'bg-status-warning/15 text-status-warning',
   },
 };
 

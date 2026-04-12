@@ -1,20 +1,20 @@
 import { Link } from 'react-router-dom';
 
-import { usePublishedSettings } from '@/features/settings/hooks/usePublishedSettings';
+import { usePublicSiteMetadata } from '@/features/public-site/hooks/usePublicSiteMetadata';
 
 function footerLinkClass() {
   return 'motion-link-soft text-sm text-foreground/55 hover:text-foreground motion-safe:active:opacity-70';
 }
 
 export function PublicFooter() {
-  const { data: settings } = usePublishedSettings({ staleTime: 5 * 60 * 1000 });
-  const siteName = settings?.siteName ?? 'Portfolio';
+  const { siteName: publishedSiteName } = usePublicSiteMetadata({ staleTime: 5 * 60 * 1000 });
+  const siteName = publishedSiteName ?? 'Portfolio';
   const year = new Date().getFullYear();
 
   return (
     <footer className="relative bg-background pt-6">
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border/50 to-transparent"
         aria-hidden
       />
       <div className="mx-auto max-w-public px-6 sm:px-10 lg:px-12 pb-10 pt-12 md:pb-12 md:pt-14">
@@ -71,7 +71,7 @@ export function PublicFooter() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-3 border-t border-white/[0.05] pt-8 md:flex-row md:items-center md:justify-between">
+        <div className="mt-14 flex flex-col gap-3 border-t border-border/40 pt-8 md:flex-row md:items-center md:justify-between">
           <p className="text-xs text-foreground/45">
             &copy; {year} {siteName}. All rights reserved.
           </p>

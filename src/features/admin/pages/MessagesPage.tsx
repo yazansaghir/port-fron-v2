@@ -119,7 +119,7 @@ export default function MessagesPage() {
                 </AdminTableBody>
               </AdminTable>
             ) : data.items.length === 0 ? (
-              <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]">
+              <div className="overflow-hidden rounded-2xl border border-border/60 bg-surface/35">
                 <AdminEmptyState title={empty.title} description={empty.description} />
               </div>
             ) : (

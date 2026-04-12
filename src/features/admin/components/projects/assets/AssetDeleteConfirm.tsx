@@ -37,7 +37,7 @@ export function AssetDeleteConfirm({ isPending, onConfirm, onCancel }: Props) {
       aria-labelledby="asset-delete-confirm-title"
     >
       <div
-        className="absolute inset-0 bg-black/40"
+        className="absolute inset-0 bg-overlay-scrim"
         onClick={onCancel}
         aria-hidden="true"
       />
@@ -62,7 +62,7 @@ export function AssetDeleteConfirm({ isPending, onConfirm, onCancel }: Props) {
             type="button"
             onClick={onConfirm}
             disabled={isPending}
-            className="rounded-md bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-70"
+            className="rounded-md bg-status-danger px-3 py-1.5 text-sm font-medium text-primary-foreground transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
           >
             {isPending ? 'Deleting…' : 'Delete'}
           </button>

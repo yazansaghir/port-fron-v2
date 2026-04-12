@@ -5,7 +5,7 @@ type SkeletonProps = {
 export function AdminSkeleton({ className = '' }: SkeletonProps) {
   return (
     <div
-      className={['animate-pulse rounded bg-white/[0.08]', className].join(' ')}
+      className={['animate-pulse rounded bg-foreground/10', className].join(' ')}
       aria-hidden="true"
     />
   );
@@ -13,9 +13,9 @@ export function AdminSkeleton({ className = '' }: SkeletonProps) {
 
 export function StatCardSkeleton() {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-8">
+    <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-surface/40 p-8">
       <div
-        className="pointer-events-none absolute right-6 top-6 h-2 w-2 rounded-full bg-white/[0.15]"
+        className="pointer-events-none absolute right-6 top-6 h-2 w-2 rounded-full bg-foreground/15"
         aria-hidden
       />
       <div className="flex flex-col items-start gap-6">

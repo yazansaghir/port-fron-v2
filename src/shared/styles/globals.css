@@ -3,8 +3,9 @@
 @tailwind utilities;
 
 /*
-  Canonical public-site palette (single source of truth).
-  Dashboard may store legacy colour fields; the live site reads these tokens only.
+  Baseline public palette when no inline theme overrides are set.
+  Published theme tokens from GET /site/appearance are merged on the document root at runtime;
+  these values remain the safe fallback if the API fails or omits keys.
   Use color-mix(in srgb, var(--color-*) …) for alpha — tokens stay hex.
 */
 :root {
@@ -14,14 +15,24 @@
   /* Tertiary wash for gradients (complements primary + secondary) */
   --color-accent: #38bdf8;
   --color-bg: #0a1020;
+  --color-bg-elevated: #121a30;
   --color-text: #f4f7ff;
+  --color-text-secondary: #cbd5e1;
   --font-sans: ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
   --color-text-muted: #94a3b8;
   --color-border: #334155;
+  --color-border-strong: #475569;
   --color-surface: #1e293b;
   --color-surface-2: #334155;
+  --color-surface-inverse: #f4f7ff;
+  --color-status-success: #22c55e;
+  --color-status-warning: #eab308;
+  --color-status-danger: #ef4444;
+  --color-status-info: #38bdf8;
+  --color-overlay-scrim: rgba(0, 0, 0, 0.55);
+  --color-focus-ring: #7c6cff;
 
   /* Motion tokens (public UI); zeroed under prefers-reduced-motion below */
   --motion-duration-fast: 180ms;

@@ -90,7 +90,7 @@ export function ProjectsTable({ projects }: Props) {
   return (
     <>
       {mutationError && (
-        <div className="mb-3 flex items-center justify-between rounded-lg border border-red-500/25 bg-red-500/10 px-3 py-2 text-sm text-foreground">
+        <div className="mb-3 flex items-center justify-between rounded-lg border border-status-danger/25 bg-status-danger/10 px-3 py-2 text-sm text-foreground">
           <span>{mutationError}</span>
           <button
             type="button"
@@ -109,7 +109,7 @@ export function ProjectsTable({ projects }: Props) {
           {sorted.map((project, idx) => (
             <AdminTableRow key={project.id}>
               {/* Title */}
-              <AdminTableCell className="font-medium text-white">
+              <AdminTableCell className="font-medium text-foreground">
                 <Link
                   to={`/admin/projects/${project.id}/edit`}
                   className="hover:text-primary hover:underline"
@@ -120,7 +120,7 @@ export function ProjectsTable({ projects }: Props) {
 
               {/* Slug */}
               <AdminTableCell>
-                <code className="rounded bg-white/[0.06] px-1.5 py-0.5 text-xs text-white/80">
+                <code className="rounded bg-foreground/8 px-1.5 py-0.5 text-xs text-text-secondary">
                   {project.slug}
                 </code>
               </AdminTableCell>
@@ -138,10 +138,10 @@ export function ProjectsTable({ projects }: Props) {
               </AdminTableCell>
 
               {/* Order */}
-              <AdminTableCell className="tabular-nums text-white/80">{project.orderIndex}</AdminTableCell>
+              <AdminTableCell className="tabular-nums text-text-secondary">{project.orderIndex}</AdminTableCell>
 
               {/* Updated */}
-              <AdminTableCell className="text-white/60">{formatDate(project.updatedAt)}</AdminTableCell>
+              <AdminTableCell className="text-muted">{formatDate(project.updatedAt)}</AdminTableCell>
 
               {/* Actions */}
               <AdminTableCell>
@@ -153,7 +153,7 @@ export function ProjectsTable({ projects }: Props) {
                     disabled={idx === 0 || isReordering}
                     title="Move up"
                     aria-label={`Move "${project.title}" up`}
-                    className="rounded p-1 text-white/50 hover:bg-white/[0.06] hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+                    className="rounded p-1 text-muted hover:bg-foreground/5 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-3.5 w-3.5" aria-hidden="true">
                       <path fillRule="evenodd" d="M8 3.22a.75.75 0 0 1 .53.22l4.25 4.25a.75.75 0 0 1-1.06 1.06L8 4.56 4.28 8.75a.75.75 0 0 1-1.06-1.06l4.25-4.25A.75.75 0 0 1 8 3.22Z" clipRule="evenodd" />
@@ -165,7 +165,7 @@ export function ProjectsTable({ projects }: Props) {
                     disabled={idx === sorted.length - 1 || isReordering}
                     title="Move down"
                     aria-label={`Move "${project.title}" down`}
-                    className="rounded p-1 text-white/50 hover:bg-white/[0.06] hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+                    className="rounded p-1 text-muted hover:bg-foreground/5 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-3.5 w-3.5" aria-hidden="true">
                       <path fillRule="evenodd" d="M8 12.78a.75.75 0 0 1-.53-.22L3.22 8.31a.75.75 0 0 1 1.06-1.06L8 11.44l3.72-4.19a.75.75 0 0 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-.53.22Z" clipRule="evenodd" />
@@ -184,7 +184,7 @@ export function ProjectsTable({ projects }: Props) {
                   <button
                     type="button"
                     onClick={() => setDeleteTarget(project)}
-                    className="rounded px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-500/10 dark:text-red-400"
+                    className="rounded px-2 py-1 text-xs font-medium text-status-danger hover:bg-status-danger/10"
                   >
                     Delete
                   </button>

@@ -90,7 +90,7 @@ export default function LogsPage() {
               </AdminTableBody>
             </AdminTable>
           ) : data.items.length === 0 ? (
-            <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]">
+            <div className="overflow-hidden rounded-2xl border border-border/60 bg-surface/35">
               <AdminEmptyState
                 title="No matching activity"
                 description="Try clearing filters or check back after new admin actions are recorded."

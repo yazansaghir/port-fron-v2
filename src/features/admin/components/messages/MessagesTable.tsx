@@ -43,7 +43,7 @@ export function MessagesTable({ messages, selectedId, onSelectMessage, onReadTog
   return (
     <>
       {mutationError && (
-        <div className="mb-3 flex items-center justify-between rounded-lg border border-red-500/25 bg-red-500/10 px-3 py-2 text-sm text-foreground">
+        <div className="mb-3 flex items-center justify-between rounded-lg border border-status-danger/25 bg-status-danger/10 px-3 py-2 text-sm text-foreground">
           <span>{mutationError}</span>
           <button
             type="button"
@@ -75,7 +75,7 @@ export function MessagesTable({ messages, selectedId, onSelectMessage, onReadTog
               >
                 {/* From */}
                 <AdminTableCell
-                  className="font-medium text-white"
+                  className="font-medium text-foreground"
                   onClick={() => onSelectMessage(msg)}
                 >
                   <span className="flex items-center gap-1.5">
@@ -91,7 +91,7 @@ export function MessagesTable({ messages, selectedId, onSelectMessage, onReadTog
 
                 {/* Email */}
                 <AdminTableCell
-                  className="text-white/70"
+                  className="text-text-secondary"
                   onClick={() => onSelectMessage(msg)}
                 >
                   <a
@@ -105,7 +105,7 @@ export function MessagesTable({ messages, selectedId, onSelectMessage, onReadTog
 
                 {/* Preview */}
                 <AdminTableCell
-                  className="max-w-xs text-white/60"
+                  className="max-w-xs text-muted"
                   onClick={() => onSelectMessage(msg)}
                 >
                   <span className="block truncate">{truncateContent(msg.content, 70)}</span>
@@ -118,7 +118,7 @@ export function MessagesTable({ messages, selectedId, onSelectMessage, onReadTog
 
                 {/* Date */}
                 <AdminTableCell
-                  className="whitespace-nowrap text-white/60"
+                  className="whitespace-nowrap text-muted"
                   onClick={() => onSelectMessage(msg)}
                 >
                   {formatMessageDate(msg.createdAt)}
@@ -138,7 +138,7 @@ export function MessagesTable({ messages, selectedId, onSelectMessage, onReadTog
                       type="button"
                       onClick={(e) => handleToggleRead(msg, e)}
                       disabled={isMutating}
-                      className="rounded px-2 py-1 text-xs font-medium text-white/60 hover:bg-white/[0.06] hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+                      className="rounded px-2 py-1 text-xs font-medium text-muted hover:bg-foreground/5 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
                       title={msg.isRead ? 'Mark as unread' : 'Mark as read'}
                     >
                       {isMutating ? '…' : msg.isRead ? 'Unread' : 'Read'}

@@ -28,10 +28,10 @@ import {
 const EMPTY: ContactFormValues = { senderName: '', senderEmail: '', content: '' };
 
 const formPanelShellClass =
-  'relative overflow-hidden rounded-3xl border border-white/10 bg-[color-mix(in_srgb,var(--color-surface)_72%,transparent)] p-8 shadow-2xl shadow-black/25 backdrop-blur-[20px] md:p-10 lg:p-11';
+  'relative overflow-hidden rounded-3xl border border-border/50 bg-[color-mix(in_srgb,var(--color-surface)_72%,transparent)] p-8 shadow-2xl shadow-[0_25px_80px_-24px_color-mix(in_srgb,var(--color-text)_28%,transparent)] backdrop-blur-[20px] md:p-10 lg:p-11';
 
 const sideCardClass =
-  'relative overflow-hidden rounded-2xl border border-white/10 bg-[color-mix(in_srgb,var(--color-surface)_58%,transparent)] p-6 shadow-xl shadow-black/20 backdrop-blur-[18px] md:p-7';
+  'relative overflow-hidden rounded-2xl border border-border/50 bg-[color-mix(in_srgb,var(--color-surface)_58%,transparent)] p-6 shadow-xl shadow-[0_20px_56px_-20px_color-mix(in_srgb,var(--color-text)_24%,transparent)] backdrop-blur-[18px] md:p-7';
 
 export default function ContactPage() {
   const [values, setValues] = useState<ContactFormValues>(EMPTY);
@@ -117,7 +117,7 @@ export default function ContactPage() {
 
             <div className="relative">
               {submitted ? null : (
-                <div className="mb-8 border-b border-white/[0.06] pb-8">
+                <div className="mb-8 border-b border-border/40 pb-8">
                   <h2 className="text-xl font-semibold tracking-tight text-foreground md:text-2xl">
                     {CONTACT_FORM_PANEL_TITLE}
                   </h2>

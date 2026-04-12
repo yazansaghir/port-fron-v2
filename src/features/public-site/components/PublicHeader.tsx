@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 
-import { usePublishedSettings } from '@/features/settings/hooks/usePublishedSettings';
+import { usePublicSiteMetadata } from '@/features/public-site/hooks/usePublicSiteMetadata';
 import { PublicButton } from '@/features/public-site/components/PublicButton';
 
 const MOBILE_NAV_ID = 'public-mobile-nav';
@@ -11,7 +11,7 @@ function desktopNavClass({ isActive }: { isActive: boolean }) {
   return [
     'rounded-full px-3.5 py-2 text-sm font-medium transition-[color,background-color,box-shadow,transform] duration-motion-fast ease-motion-out motion-safe:active:scale-[0.98]',
     isActive
-      ? 'bg-foreground/[0.09] text-foreground shadow-[inset_0_0_0_1px_rgba(255,255,255,0.07)]'
+      ? 'bg-foreground/[0.09] text-foreground shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--color-border)_55%,transparent)]'
       : 'text-foreground/55 hover:bg-foreground/[0.05] hover:text-foreground/90 motion-safe:hover:-translate-y-px',
   ].join(' ');
 }
@@ -20,15 +20,15 @@ function sheetNavClass({ isActive }: { isActive: boolean }) {
   return [
     'block rounded-xl px-4 py-3.5 text-base font-medium transition-[color,background-color] duration-motion-fast ease-motion-out',
     isActive
-      ? 'bg-foreground/[0.1] text-foreground shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]'
+      ? 'bg-foreground/[0.1] text-foreground shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--color-border)_60%,transparent)]'
       : 'text-foreground/65 hover:bg-foreground/[0.06] hover:text-foreground',
   ].join(' ');
 }
 
 export function PublicHeader() {
   const { pathname } = useLocation();
-  const { data: settings } = usePublishedSettings({ staleTime: 5 * 60 * 1000 });
-  const siteName = settings?.siteName ?? 'Portfolio';
+  const { siteName: publishedSiteName } = usePublicSiteMetadata({ staleTime: 5 * 60 * 1000 });
+  const siteName = publishedSiteName ?? 'Portfolio';
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -83,9 +83,9 @@ export function PublicHeader() {
           role="dialog"
           aria-modal="true"
           aria-label="Site navigation"
-          className="absolute inset-y-0 right-0 flex w-full max-w-sm flex-col border-l border-white/[0.08] bg-background/95 shadow-2xl shadow-black/40 backdrop-blur-xl transition-transform duration-200 ease-out translate-x-0"
+          className="absolute inset-y-0 right-0 flex w-full max-w-sm flex-col border-l border-border/50 bg-background/95 shadow-2xl shadow-[0_24px_64px_-24px_color-mix(in_srgb,var(--color-text)_35%,transparent)] backdrop-blur-xl transition-transform duration-200 ease-out translate-x-0"
         >
-          <div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-4">
+          <div className="flex items-center justify-between border-b border-border/40 px-5 py-4">
             <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">Menu</p>
             <button
               type="button"
@@ -123,7 +123,7 @@ export function PublicHeader() {
               Contact
             </NavLink>
           </nav>
-          <div className="border-t border-white/[0.06] p-5" onClick={closeMenu}>
+          <div className="border-t border-border/40 p-5" onClick={closeMenu}>
             <PublicButton pill variant="primary" to="/contact" className="w-full !py-3.5 !text-sm">
               Let&apos;s talk
             </PublicButton>
@@ -134,7 +134,7 @@ export function PublicHeader() {
     );
 
   return (
-    <header className="sticky top-0 z-30 bg-background/75 backdrop-blur-xl shadow-[inset_0_-1px_0_0_rgba(255,255,255,0.05)]">
+    <header className="sticky top-0 z-30 bg-background/75 backdrop-blur-xl shadow-[inset_0_-1px_0_0_color-mix(in_srgb,var(--color-border)_45%,transparent)]">
       <div
         className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"
         aria-hidden
@@ -155,7 +155,7 @@ export function PublicHeader() {
 
         <nav
           aria-label="Site navigation"
-          className="hidden items-center gap-1 rounded-full border border-white/[0.06] bg-foreground/[0.03] px-1.5 py-1 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] sm:flex"
+          className="hidden items-center gap-1 rounded-full border border-border/40 bg-foreground/[0.03] px-1.5 py-1 shadow-[inset_0_1px_0_0_color-mix(in_srgb,var(--color-border)_35%,transparent)] sm:flex"
         >
           <NavLink to="/" end className={desktopNavClass}>
             Home

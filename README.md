@@ -121,7 +121,7 @@ Deploy the `dist` folder to any static host with the same rewrite behavior, or c
 | `/admin/projects/new` | Create project |
 | `/admin/projects/:id/edit` | Edit project and assets |
 | `/admin/messages` | Contact messages |
-| `/admin/settings` | Site settings versions |
+| `/admin/settings` | Site name, live theme, theme library, drafts, and publish |
 | `/admin/logs` | Admin activity / audit log viewer |
 
 ## Backend API Surface (Consumed by This Client)
@@ -135,7 +135,8 @@ All paths are relative to `VITE_API_BASE_URL`. The client sends JSON (except mul
 **Public / published**
 
 - `GET /projects`, `GET /projects/:slug`
-- `GET /settings` — published site configuration
+- `GET /site/appearance` — published site theme tokens + metadata (primary source for public CSS variables)
+- `GET /settings` — compat published configuration (optional metadata fallback)
 - `POST /messages` — contact form submission
 - `POST /analytics/track/:projectId` — visit / dwell tracking (also used with `keepalive` fetch)
 
@@ -144,7 +145,7 @@ All paths are relative to `VITE_API_BASE_URL`. The client sends JSON (except mul
 - Projects: `GET/POST /admin/projects`, `GET/PATCH/DELETE /admin/projects/:id`, `PATCH /admin/projects/:id/status`, `PUT /admin/projects/reorder`
 - Assets: `POST /admin/projects/:projectId/assets` (multipart), `DELETE /admin/assets/:assetId`, `PATCH` for order and alt text
 - Messages: `GET /admin/messages`, `PATCH /admin/messages/:id/read`
-- Settings: `GET /admin/settings`, `PUT /admin/settings/:id`, `POST /admin/settings/clone`, `PATCH /admin/settings/:id/publish`
+- Site & themes: `GET/POST /admin/themes`, `GET /admin/themes/:id`, `PATCH /admin/themes/:id/draft`, `POST /admin/themes/:id/publish`, `GET /admin/themes/:id/revisions`, `POST /admin/themes/:id/duplicate`, `PATCH /admin/site-settings`
 - Logs: `GET /admin/logs`
 - Analytics: `GET /admin/analytics/stats`
 
@@ -155,7 +156,7 @@ The backend implementation is **not** in this repository; this list reflects the
 - **Cookie sessions**: `apiClient` uses `withCredentials: true`, so the API must issue and accept session cookies with appropriate `SameSite` / CORS settings for your deployment topology.
 - **Lazy routes**: Page components are `lazy()`-loaded in `routes.tsx` to reduce the initial bundle; a shared `PageLoading` fallback is used during chunk load.
 - **Query defaults**: React Query uses a 60s `staleTime` and a single retry on queries; mutations do not retry (`queryClient.ts`).
-- **Typography from API**: Published settings update `--font-sans` on the document root; base colors remain primarily in `globals.css` unless preview paths apply inline tokens (admin preview).
+- **Theming**: `GET /site/appearance` drives semantic CSS variables on `document.documentElement` (colours + `--font-sans` / `--font-mono`). `globals.css` supplies defaults and motion tokens. Admin draft preview scopes the same variables on a subtree only.
 
 ## Current Scope
 

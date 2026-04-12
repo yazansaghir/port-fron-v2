@@ -46,7 +46,7 @@ export function AdminTable({ children, className = '', framed = true }: TablePro
   return (
     <div
       className={[
-        'overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]',
+        'overflow-hidden rounded-2xl border border-border/60 bg-surface/35',
         className,
       ].join(' ')}
     >
@@ -58,13 +58,13 @@ export function AdminTable({ children, className = '', framed = true }: TablePro
 export function AdminTableHead({ columns, columnAlign }: HeadProps) {
   return (
     <thead>
-      <tr className="border-b border-white/10">
+      <tr className="border-b border-border/60">
         {columns.map((col, i) => (
           <th
             key={col}
             scope="col"
             className={[
-              'px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/60',
+              'px-6 py-4 text-xs font-semibold uppercase tracking-wider text-muted',
               thAlign(i, columnAlign),
             ].join(' ')}
           >
@@ -82,7 +82,7 @@ export function AdminTableBody({ children }: BodyProps) {
 
 export function AdminTableRow({ children, className = '', ...props }: RowProps) {
   return (
-    <tr className={['hover:bg-white/[0.03]', className].join(' ')} {...props}>
+    <tr className={['hover:bg-foreground/5', className].join(' ')} {...props}>
       {children}
     </tr>
   );
@@ -91,7 +91,7 @@ export function AdminTableRow({ children, className = '', ...props }: RowProps) 
 export function AdminTableCell({ children, className = '', ...props }: CellProps) {
   return (
     <td
-      className={['px-6 py-5 text-sm text-white/80', className].join(' ')}
+      className={['px-6 py-5 text-sm text-text-secondary', className].join(' ')}
       {...props}
     >
       {children}

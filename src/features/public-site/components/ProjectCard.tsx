@@ -11,7 +11,7 @@ type ProjectCardProps = {
 
 function DefaultCard({ project }: { project: PublishedProjectListItem }) {
   return (
-    <article className="motion-hover-lift motion-card-surface group flex flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-foreground/[0.03] shadow-none hover:border-primary/35 hover:shadow-[0_16px_36px_-20px_rgba(0,0,0,0.45)]">
+    <article className="motion-hover-lift motion-card-surface group flex flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-foreground/[0.03] shadow-none hover:border-primary/35 hover:shadow-[0_16px_36px_-20px_color-mix(in_srgb,var(--color-text)_28%,transparent)]">
       <Link
         to={`/projects/${project.slug}`}
         className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
@@ -51,7 +51,7 @@ function DefaultCard({ project }: { project: PublishedProjectListItem }) {
 function HomeCard({ project }: { project: PublishedProjectListItem }) {
   return (
     <article
-      className="motion-hover-lift motion-card-surface group relative flex flex-col overflow-hidden rounded-3xl border border-white/[0.07] bg-gradient-to-b from-foreground/[0.07] to-foreground/[0.02] shadow-[0_32px_72px_-32px_rgba(0,0,0,0.65),inset_0_1px_0_0_rgba(255,255,255,0.07)] hover:border-primary/30 hover:shadow-[0_40px_80px_-32px_rgba(0,0,0,0.7),0_0_48px_-16px_color-mix(in_srgb,var(--color-primary)_30%,transparent)]"
+      className="motion-hover-lift motion-card-surface group relative flex flex-col overflow-hidden rounded-3xl border border-border/40 bg-gradient-to-b from-foreground/[0.07] to-foreground/[0.02] shadow-[0_32px_72px_-32px_color-mix(in_srgb,var(--color-text)_38%,transparent),inset_0_1px_0_0_color-mix(in_srgb,var(--color-border)_50%,transparent)] hover:border-primary/30 hover:shadow-[0_40px_80px_-32px_color-mix(in_srgb,var(--color-text)_42%,transparent),0_0_48px_-16px_color-mix(in_srgb,var(--color-primary)_30%,transparent)]"
       style={{ backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}
     >
       <Link
@@ -60,7 +60,7 @@ function HomeCard({ project }: { project: PublishedProjectListItem }) {
       >
         {/* Media area — tall aspect ratio */}
         <div className="p-3 pb-0">
-          <div className="relative overflow-hidden rounded-2xl ring-1 ring-inset ring-white/[0.08]">
+          <div className="relative overflow-hidden rounded-2xl ring-1 ring-inset ring-border/45">
             <div className="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-primary/[0.1] to-secondary/[0.07]">
               {project.thumbnailUrl ? (
                 <img
@@ -98,7 +98,7 @@ function HomeCard({ project }: { project: PublishedProjectListItem }) {
           ) : null}
 
           <div className="mt-2">
-            <span className="inline-flex items-center gap-2.5 rounded-full border border-white/[0.12] bg-foreground/[0.06] px-5 py-2.5 text-sm font-semibold tracking-wide text-foreground/80 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] transition-[border-color,background-color,color,gap] duration-motion-fast ease-motion-out motion-safe:group-hover:gap-3 group-hover:border-primary/40 group-hover:bg-primary/[0.12] group-hover:text-primary">
+            <span className="inline-flex items-center gap-2.5 rounded-full border border-border/50 bg-foreground/[0.06] px-5 py-2.5 text-sm font-semibold tracking-wide text-foreground/80 shadow-[inset_0_1px_0_0_color-mix(in_srgb,var(--color-border)_40%,transparent)] transition-[border-color,background-color,color,gap] duration-motion-fast ease-motion-out motion-safe:group-hover:gap-3 group-hover:border-primary/40 group-hover:bg-primary/[0.12] group-hover:text-primary">
               View case study
               <svg
                 width="15"
@@ -128,7 +128,7 @@ function HomeCard({ project }: { project: PublishedProjectListItem }) {
 function ShowcaseCard({ project }: { project: PublishedProjectListItem }) {
   return (
     <article
-      className="motion-hover-lift motion-card-surface group relative flex flex-col overflow-hidden rounded-3xl border border-white/[0.07] bg-gradient-to-b from-foreground/[0.07] to-foreground/[0.02] shadow-[0_32px_72px_-32px_rgba(0,0,0,0.65),inset_0_1px_0_0_rgba(255,255,255,0.07)] hover:border-primary/30 hover:shadow-[0_40px_80px_-32px_rgba(0,0,0,0.7),0_0_48px_-16px_color-mix(in_srgb,var(--color-primary)_30%,transparent)]"
+      className="motion-hover-lift motion-card-surface group relative flex flex-col overflow-hidden rounded-3xl border border-border/40 bg-gradient-to-b from-foreground/[0.07] to-foreground/[0.02] shadow-[0_32px_72px_-32px_color-mix(in_srgb,var(--color-text)_38%,transparent),inset_0_1px_0_0_color-mix(in_srgb,var(--color-border)_50%,transparent)] hover:border-primary/30 hover:shadow-[0_40px_80px_-32px_color-mix(in_srgb,var(--color-text)_42%,transparent),0_0_48px_-16px_color-mix(in_srgb,var(--color-primary)_30%,transparent)]"
       style={{ backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}
     >
       <Link
@@ -136,7 +136,7 @@ function ShowcaseCard({ project }: { project: PublishedProjectListItem }) {
         className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
         <div className="p-3 pb-0">
-          <div className="relative overflow-hidden rounded-2xl ring-1 ring-inset ring-white/[0.08]">
+          <div className="relative overflow-hidden rounded-2xl ring-1 ring-inset ring-border/45">
             <div className="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-primary/[0.1] to-secondary/[0.07]">
               {project.thumbnailUrl ? (
                 <img
@@ -170,7 +170,7 @@ function ShowcaseCard({ project }: { project: PublishedProjectListItem }) {
           ) : null}
 
           <div className="mt-2">
-            <span className="inline-flex items-center gap-2.5 rounded-full border border-white/[0.12] bg-foreground/[0.06] px-5 py-2.5 text-sm font-semibold tracking-wide text-foreground/80 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] transition-[border-color,background-color,color,gap] duration-motion-fast ease-motion-out motion-safe:group-hover:gap-3 group-hover:border-primary/40 group-hover:bg-primary/[0.12] group-hover:text-primary">
+            <span className="inline-flex items-center gap-2.5 rounded-full border border-border/50 bg-foreground/[0.06] px-5 py-2.5 text-sm font-semibold tracking-wide text-foreground/80 shadow-[inset_0_1px_0_0_color-mix(in_srgb,var(--color-border)_40%,transparent)] transition-[border-color,background-color,color,gap] duration-motion-fast ease-motion-out motion-safe:group-hover:gap-3 group-hover:border-primary/40 group-hover:bg-primary/[0.12] group-hover:text-primary">
               View case study
               <svg
                 width="15"

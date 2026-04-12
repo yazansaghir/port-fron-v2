@@ -12,8 +12,8 @@ export function HomeClosingCta({ variant = 'default' }: HomeClosingCtaProps) {
   const isElevated = variant === 'elevated';
 
   const shellClass = isElevated
-    ? 'relative mx-auto max-w-4xl overflow-hidden rounded-[2rem] border border-primary/25 p-12 text-center shadow-2xl shadow-black/30 ring-1 ring-inset ring-white/[0.07] md:p-24 motion-safe:transition-[border-color,box-shadow] motion-safe:duration-motion motion-safe:ease-motion-out motion-safe:hover:border-primary/40 motion-safe:hover:shadow-[0_28px_72px_-36px_rgba(0,0,0,0.5)]'
-    : 'relative mx-auto max-w-4xl overflow-hidden rounded-[2rem] border border-border/40 p-12 text-center md:p-20 motion-safe:transition-[border-color,box-shadow] motion-safe:duration-motion motion-safe:ease-motion-out motion-safe:hover:border-primary/35 motion-safe:hover:shadow-[0_24px_64px_-36px_rgba(0,0,0,0.42)]';
+    ? 'relative mx-auto max-w-4xl overflow-hidden rounded-[2rem] border border-primary/25 p-12 text-center shadow-2xl shadow-[0_28px_80px_-28px_color-mix(in_srgb,var(--color-text)_32%,transparent)] ring-1 ring-inset ring-border/45 md:p-24 motion-safe:transition-[border-color,box-shadow] motion-safe:duration-motion motion-safe:ease-motion-out motion-safe:hover:border-primary/40 motion-safe:hover:shadow-[0_28px_72px_-36px_color-mix(in_srgb,var(--color-text)_38%,transparent)]'
+    : 'relative mx-auto max-w-4xl overflow-hidden rounded-[2rem] border border-border/40 p-12 text-center md:p-20 motion-safe:transition-[border-color,box-shadow] motion-safe:duration-motion motion-safe:ease-motion-out motion-safe:hover:border-primary/35 motion-safe:hover:shadow-[0_24px_64px_-36px_color-mix(in_srgb,var(--color-text)_32%,transparent)]';
 
   return (
     <div className={shellClass}>

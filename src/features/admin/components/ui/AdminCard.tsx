@@ -9,7 +9,7 @@ export function AdminCard({ children, className = '' }: Props) {
   return (
     <div
       className={[
-        'rounded-2xl border border-white/10 bg-white/[0.02]',
+        'rounded-2xl border border-border/60 bg-surface/35',
         className,
       ].join(' ')}
     >

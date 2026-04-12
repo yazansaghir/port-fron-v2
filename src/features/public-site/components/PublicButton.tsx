@@ -53,7 +53,7 @@ export function PublicButton({
   if (pill) {
     classes = `${base} ${pillBase} ${className}`;
     if (variant === 'primary') {
-      classes = `${classes} motion-hover-lift text-white glow-primary hover:opacity-95`;
+      classes = `${classes} motion-hover-lift text-primary-foreground glow-primary hover:opacity-95`;
       style = pillPrimaryStyle;
     } else if (variant === 'secondary') {
       classes = `${classes} motion-hover-lift glass border text-center`;

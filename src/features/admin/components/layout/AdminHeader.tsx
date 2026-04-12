@@ -23,14 +23,14 @@ export function AdminHeader({ userEmail, onLogout, logoutPending, onOpenMenu }: 
   const title = resolvePageTitle(pathname);
 
   return (
-    <header className="shrink-0 border-b border-white/10 bg-background">
+    <header className="shrink-0 border-b border-border/60 bg-background">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-6 lg:h-16 lg:px-8">
         <div className="flex min-w-0 items-center gap-3">
           {/* Mobile menu button */}
           <button
             type="button"
             onClick={onOpenMenu}
-            className="rounded-lg p-2 text-white/60 hover:bg-white/[0.05] hover:text-white md:hidden"
+            className="rounded-lg p-2 text-muted hover:bg-foreground/5 hover:text-foreground md:hidden"
             aria-label="Open navigation"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden="true">
@@ -41,17 +41,17 @@ export function AdminHeader({ userEmail, onLogout, logoutPending, onOpenMenu }: 
           </button>
 
           {/* Breadcrumb: "Admin / <page title>" */}
-          <div className="flex min-w-0 items-center gap-2 text-sm text-white/60">
+          <div className="flex min-w-0 items-center gap-2 text-sm text-muted">
             <span className="hidden font-medium md:inline">Admin</span>
-            <span className="hidden text-white/30 md:inline">/</span>
-            <h1 className="truncate text-xl font-semibold text-white">{title}</h1>
+            <span className="hidden text-muted/50 md:inline">/</span>
+            <h1 className="truncate text-xl font-semibold text-foreground">{title}</h1>
           </div>
         </div>
 
         <div className="flex shrink-0 items-center gap-3">
           {userEmail && (
             <span
-              className="hidden max-w-[200px] truncate text-sm text-white/60 sm:inline"
+              className="hidden max-w-[200px] truncate text-sm text-muted sm:inline"
               title={userEmail}
             >
               {userEmail}
@@ -61,7 +61,7 @@ export function AdminHeader({ userEmail, onLogout, logoutPending, onOpenMenu }: 
             type="button"
             onClick={onLogout}
             disabled={logoutPending}
-            className="rounded-lg border border-white/10 px-3 py-1.5 text-sm font-medium text-white/80 hover:bg-white/[0.05] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-lg border border-border/60 px-3 py-1.5 text-sm font-medium text-text-secondary hover:bg-foreground/5 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
           >
             {logoutPending ? 'Signing out…' : 'Log out'}
           </button>

@@ -1,4 +1,4 @@
-import { usePublishedSettings } from '@/features/settings/hooks/usePublishedSettings';
+import { usePublicSiteMetadata } from '@/features/public-site/hooks/usePublicSiteMetadata';
 import { usePublishedProjects } from '@/features/projects/hooks/usePublishedProjects';
 import { getDisplayMessage } from '@/shared/api/mapApiError';
 import { PageLoading } from '@/app/router/PageLoading';
@@ -23,7 +23,7 @@ import { expertiseItems } from '@/features/public-site/content/expertise';
 import { FEATURED_PROJECTS_COUNT } from '@/features/public-site/constants';
 
 export default function HomePage() {
-  const { data: settings } = usePublishedSettings({ staleTime: 5 * 60 * 1000 });
+  const { siteName: publishedSiteName } = usePublicSiteMetadata({ staleTime: 5 * 60 * 1000 });
   const {
     data: projectsPage,
     isLoading,
@@ -31,7 +31,7 @@ export default function HomePage() {
     error,
   } = usePublishedProjects({ limit: FEATURED_PROJECTS_COUNT });
 
-  const siteName = settings?.siteName ?? 'My Portfolio';
+  const siteName = publishedSiteName ?? 'My Portfolio';
   const items = projectsPage?.items ?? [];
   const featuredProjects = items.slice(0, FEATURED_PROJECTS_COUNT);
   const totalPublished = projectsPage?.total ?? 0;

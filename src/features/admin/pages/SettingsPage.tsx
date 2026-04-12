@@ -1,132 +1,153 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
 import { AdminButton } from '@/features/admin/components/ui/AdminButton';
 import { AdminCard } from '@/features/admin/components/ui/AdminCard';
 import { AdminSection } from '@/features/admin/components/ui/AdminSection';
-import { SettingsEditorForm } from '@/features/admin/components/settings/SettingsEditorForm';
-import {
-  editorValuesToRequest,
-  settingsToEditorValues,
-  type SettingsEditorValues,
-} from '@/features/admin/components/settings/SettingsEditorForm';
-import { SettingsPreviewCard } from '@/features/admin/components/settings/SettingsPreviewCard';
-import { SettingsVersionList } from '@/features/admin/components/settings/SettingsVersionList';
+import { ThemeDraftEditor } from '@/features/admin/components/settings/ThemeDraftEditor';
+import { ThemePreviewShell } from '@/features/admin/components/settings/ThemePreviewShell';
+import { ThemeRevisionsPanel } from '@/features/admin/components/settings/ThemeRevisionsPanel';
 import { inputClass, labelClass } from '@/features/admin/components/settings/settingsFormClasses';
-import type { SiteSettings } from '@/features/settings/api/settings.types';
-import { useAdminSettingsList } from '@/features/settings/hooks/useAdminSettingsList';
-import { useCloneAdminSettings } from '@/features/settings/hooks/useCloneAdminSettings';
-import { usePublishAdminSettings } from '@/features/settings/hooks/usePublishAdminSettings';
-import { useUpdateAdminSettings } from '@/features/settings/hooks/useUpdateAdminSettings';
-import { ADMIN_SETTINGS_MAX_LIMIT } from '@/shared/api/pagination';
+import { formatMessageDateTime } from '@/features/admin/components/messages/messageDate';
+import { useSiteAppearance } from '@/features/public-site/hooks/useSiteAppearance';
+import {
+  draftTokensToNormalized,
+  type NormalizedSemanticTokens,
+} from '@/features/public-site/lib/theme-runtime';
+import { parseThemeDraftTokens } from '@/features/themes/api/themesWire';
+import { useAdminThemeDetail } from '@/features/themes/hooks/useAdminThemeDetail';
+import { useAdminThemesList } from '@/features/themes/hooks/useAdminThemesList';
+import { useCreateAdminTheme } from '@/features/themes/hooks/useCreateAdminTheme';
+import { useDuplicateAdminTheme } from '@/features/themes/hooks/useDuplicateAdminTheme';
+import { usePatchSiteSettings } from '@/features/themes/hooks/usePatchSiteSettings';
+import { usePublishAdminTheme } from '@/features/themes/hooks/usePublishAdminTheme';
+import { useUpdateAdminThemeDraft } from '@/features/themes/hooks/useUpdateAdminThemeDraft';
 import { getDisplayMessage, getFieldErrorsRecord } from '@/shared/api/mapApiError';
 
-const QUERY_PARAMS = { limit: ADMIN_SETTINGS_MAX_LIMIT };
-
-function pickDefaultId(items: SiteSettings[]): string | null {
-  if (items.length === 0) return null;
-  return (items.find((i) => i.isPublished) ?? items[0]).id;
-}
-
 export default function SettingsPage() {
-  const { data, isPending, isError, error, refetch } = useAdminSettingsList(QUERY_PARAMS);
+  const { data: themes, isPending: themesLoading, isError: themesError, error: themesErr, refetch } =
+    useAdminThemesList();
 
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [formValues, setFormValues] = useState<SettingsEditorValues | null>(null);
+  const { data: appearance } = useSiteAppearance({ staleTime: 60 * 1000 });
 
-  // Seed selection once data is loaded
+  const [selectedThemeId, setSelectedThemeId] = useState<string | null>(null);
+  const [siteName, setSiteName] = useState('');
+  const [liveThemeId, setLiveThemeId] = useState('');
+
+  const [draftPreview, setDraftPreview] = useState<NormalizedSemanticTokens>(() =>
+    draftTokensToNormalized(parseThemeDraftTokens({})),
+  );
+
+  const [newThemeName, setNewThemeName] = useState('');
+  const [duplicateName, setDuplicateName] = useState('');
+
+  const { data: selectedTheme, isPending: detailLoading } = useAdminThemeDetail(selectedThemeId);
+
   useEffect(() => {
-    if (!data || selectedId !== null) return;
-    const id = pickDefaultId(data.items);
-    setSelectedId(id);
-  }, [data, selectedId]);
+    if (!themes?.length) return;
+    setSelectedThemeId((id) => id ?? (themes.find((t) => t.isPublished) ?? themes[0]).id);
+  }, [themes]);
 
-  // Sync form values when selected version changes
   useEffect(() => {
-    if (!data || !selectedId) {
-      setFormValues(null);
-      return;
+    if (!appearance) return;
+    if (appearance.siteName) setSiteName(appearance.siteName);
+    if (appearance.publishedThemeId) {
+      setLiveThemeId((cur) => appearance.publishedThemeId ?? cur);
     }
-    const found = data.items.find((i) => i.id === selectedId);
-    if (found) setFormValues(settingsToEditorValues(found));
-  }, [selectedId, data]);
+  }, [appearance]);
 
-  const selectedItem = data?.items.find((i) => i.id === selectedId) ?? null;
+  useEffect(() => {
+    if (!themes?.length) return;
+    setLiveThemeId((id) => id || (themes.find((t) => t.isPublished)?.id ?? themes[0].id));
+  }, [themes]);
 
-  // ── Save ──────────────────────────────────────────────────────────────────
-  const [saveError, setSaveError] = useState<string | null>(null);
-  const [saveFieldErrors, setSaveFieldErrors] = useState<Record<string, string>>({});
+  useEffect(() => {
+    if (!selectedTheme) return;
+    setDraftPreview(draftTokensToNormalized(parseThemeDraftTokens(selectedTheme.draft?.tokens ?? {})));
+  }, [selectedTheme]);
 
-  const { mutate: save, isPending: isSaving } = useUpdateAdminSettings({
-    onSuccess: (updated) => {
-      setSaveError(null);
-      setSaveFieldErrors({});
-      // Refresh form values from server response to pick up server-normalized fields
-      setFormValues(settingsToEditorValues(updated));
-    },
-    onError: (err) => {
-      setSaveError(getDisplayMessage(err, 'Failed to save settings.'));
-      setSaveFieldErrors(getFieldErrorsRecord(err));
-    },
+  const handlePreviewChange = useCallback((tokens: NormalizedSemanticTokens) => {
+    setDraftPreview(tokens);
+  }, []);
+
+  const [siteError, setSiteError] = useState<string | null>(null);
+  const { mutate: saveSite, isPending: savingSite } = usePatchSiteSettings({
+    onSuccess: () => setSiteError(null),
+    onError: (e) => setSiteError(getDisplayMessage(e, 'Failed to save site settings.')),
   });
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSaveSite(e: React.FormEvent) {
     e.preventDefault();
-    if (!selectedId || !formValues) return;
-    save({ id: selectedId, body: editorValuesToRequest(formValues) });
-  }
-
-  function handleFieldChange(field: keyof SettingsEditorValues, value: string) {
-    setFormValues((prev) => (prev ? { ...prev, [field]: value } : prev));
-  }
-
-  // ── Clone ─────────────────────────────────────────────────────────────────
-  const [cloneName, setCloneName] = useState('');
-  const [cloneError, setCloneError] = useState<string | null>(null);
-
-  const { mutate: clone, isPending: isCloning } = useCloneAdminSettings({
-    onSuccess: (created) => {
-      setCloneError(null);
-      setCloneName('');
-      setSelectedId(created.id);
-    },
-    onError: (err) => {
-      setCloneError(getDisplayMessage(err, 'Failed to clone settings.'));
-    },
-  });
-
-  function handleClone() {
-    if (!selectedId) return;
-    clone({
-      sourceId: selectedId,
-      ...(cloneName.trim() ? { versionName: cloneName.trim() } : {}),
+    saveSite({
+      siteName: siteName.trim() || undefined,
+      ...(liveThemeId ? { publishedThemeId: liveThemeId } : {}),
     });
   }
 
-  // ── Publish ───────────────────────────────────────────────────────────────
-  const [publishError, setPublishError] = useState<string | null>(null);
-
-  const { mutate: publish, isPending: isPublishing } = usePublishAdminSettings({
+  const [draftError, setDraftError] = useState<string | null>(null);
+  const [draftFieldErrors, setDraftFieldErrors] = useState<Record<string, string>>({});
+  const { mutate: saveDraft, isPending: savingDraft } = useUpdateAdminThemeDraft({
     onSuccess: () => {
-      setPublishError(null);
+      setDraftError(null);
+      setDraftFieldErrors({});
     },
     onError: (err) => {
-      setPublishError(getDisplayMessage(err, 'Failed to publish settings.'));
+      setDraftError(getDisplayMessage(err, 'Failed to save draft.'));
+      setDraftFieldErrors(getFieldErrorsRecord(err));
     },
   });
 
+  const [publishError, setPublishError] = useState<string | null>(null);
+  const { mutate: publishTheme, isPending: publishing } = usePublishAdminTheme({
+    onSuccess: () => setPublishError(null),
+    onError: (e) => setPublishError(getDisplayMessage(e, 'Failed to publish theme.')),
+  });
+
+  const [createError, setCreateError] = useState<string | null>(null);
+  const { mutate: createTheme, isPending: creating } = useCreateAdminTheme({
+    onSuccess: (created) => {
+      setCreateError(null);
+      setNewThemeName('');
+      setSelectedThemeId(created.id);
+    },
+    onError: (e) => setCreateError(getDisplayMessage(e, 'Failed to create theme.')),
+  });
+
+  const [dupError, setDupError] = useState<string | null>(null);
+  const { mutate: duplicateTheme, isPending: duplicating } = useDuplicateAdminTheme({
+    onSuccess: (created) => {
+      setDupError(null);
+      setDuplicateName('');
+      setSelectedThemeId(created.id);
+    },
+    onError: (e) => setDupError(getDisplayMessage(e, 'Failed to duplicate theme.')),
+  });
+
+  const busy = savingSite || savingDraft || publishing || creating || duplicating;
+
   function handlePublish() {
-    if (!selectedId) return;
+    if (!selectedThemeId) return;
     if (
       !window.confirm(
-        'Publish this version? The public site will use the published site name and font. Brand colours are fixed in the site stylesheet; stored colour fields are not applied on the live site.',
+        'Publish this theme? Visitors will see the published revision on the public site.',
       )
     )
       return;
-    publish(selectedId);
+    publishTheme(selectedThemeId);
   }
 
-  const isActionBusy = isSaving || isCloning || isPublishing;
+  function handleCreate() {
+    const name = newThemeName.trim() || 'New theme';
+    createTheme({ name });
+  }
+
+  function handleDuplicate() {
+    if (!selectedThemeId) return;
+    duplicateTheme({
+      themeId: selectedThemeId,
+      ...(duplicateName.trim() ? { name: duplicateName.trim() } : {}),
+    });
+  }
 
   return (
     <motion.div
@@ -135,24 +156,22 @@ export default function SettingsPage() {
       transition={{ duration: 0.25 }}
       className="space-y-6"
     >
-      {/* Page header */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-lg font-semibold text-foreground">Settings</h2>
-          {data && !isPending && (
+          {themes && !themesLoading && (
             <p className="mt-0.5 text-sm text-foreground/50">
-              {data.total} version{data.total !== 1 ? 's' : ''}
+              {themes.length} theme{themes.length !== 1 ? 's' : ''}
             </p>
           )}
         </div>
       </div>
 
-      {/* List fetch error */}
-      {isError && (
+      {themesError && (
         <AdminCard className="p-5">
           <div className="flex flex-col items-start gap-3">
             <p className="text-sm text-foreground/80">
-              {getDisplayMessage(error, 'Failed to load settings.')}
+              {getDisplayMessage(themesErr, 'Failed to load themes.')}
             </p>
             <AdminButton variant="soft" onClick={() => void refetch()}>
               Retry
@@ -161,142 +180,212 @@ export default function SettingsPage() {
         </AdminCard>
       )}
 
-      {!isError && (
-        <div className="grid grid-cols-1 gap-6 xl:grid-cols-[320px_1fr]">
-          {/* Left: version list */}
-          <div className="space-y-3">
-            <AdminSection title="Versions" description="Select a version to edit.">
-              <SettingsVersionList
-                items={data?.items ?? []}
-                selectedId={selectedId}
-                onSelect={(id) => {
-                  setSelectedId(id);
-                  setSaveError(null);
-                  setSaveFieldErrors({});
-                }}
-                isLoading={isPending}
-              />
-            </AdminSection>
-          </div>
+      {!themesError && (
+        <div className="space-y-6">
+          <AdminSection
+            title="Site"
+            description="Site name and which theme is live for visitors."
+          >
+            <AdminCard className="p-5">
+              <form onSubmit={handleSaveSite} className="space-y-4">
+                {siteError && <p className="text-sm text-status-danger">{siteError}</p>}
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="site-name" className={labelClass}>
+                      Site name
+                    </label>
+                    <input
+                      id="site-name"
+                      type="text"
+                      value={siteName}
+                      onChange={(e) => setSiteName(e.target.value)}
+                      disabled={busy}
+                      maxLength={100}
+                      className={inputClass}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="live-theme" className={labelClass}>
+                      Live theme
+                    </label>
+                    <select
+                      id="live-theme"
+                      value={liveThemeId}
+                      onChange={(e) => setLiveThemeId(e.target.value)}
+                      disabled={busy || !themes?.length}
+                      className={inputClass}
+                    >
+                      {(themes ?? []).map((t) => (
+                        <option key={t.id} value={t.id}>
+                          {t.name}
+                          {t.isPublished ? ' (published)' : ''}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="flex justify-end">
+                  <AdminButton type="submit" disabled={busy} className="px-4 py-2">
+                    {savingSite ? 'Saving…' : 'Save site settings'}
+                  </AdminButton>
+                </div>
+              </form>
+            </AdminCard>
+          </AdminSection>
 
-          {/* Right: editor + preview + actions */}
-          <div className="space-y-6">
-            {!isPending && !selectedItem && data?.items.length === 0 ? null : (
-              <>
-                {/* Editor form */}
-                <AdminSection
-                  title="Edit version"
-                  description={
-                    selectedItem
-                      ? `Editing: ${selectedItem.versionName ?? selectedItem.id}. Live appearance: site name, font, and CSS tokens — stored colours are database-only.`
-                      : undefined
-                  }
-                >
-                  <AdminCard className="p-5">
-                    {isPending || !formValues ? (
-                      <div className="space-y-4 animate-pulse">
-                        {Array.from({ length: 4 }).map((_, i) => (
-                          <div key={i} className="h-9 rounded-lg bg-foreground/8" />
-                        ))}
-                      </div>
-                    ) : (
-                      <SettingsEditorForm
-                        values={formValues}
-                        onChange={handleFieldChange}
-                        onSubmit={handleSubmit}
-                        isSaving={isSaving}
-                        fieldErrors={saveFieldErrors}
-                        generalError={saveError}
-                      />
-                    )}
-                  </AdminCard>
-                </AdminSection>
-
-                {/* Preview */}
-                {formValues && (
-                  <AdminSection
-                    title="Preview"
-                    description="Scoped preview of stored colours and font. Public pages use fixed brand tokens from CSS, not these stored colours."
-                  >
-                    <SettingsPreviewCard values={formValues} />
-                  </AdminSection>
-                )}
-
-                {/* Clone + Publish actions */}
-                {!isPending && selectedItem && (
-                  <AdminSection title="Version actions">
-                    <AdminCard className="divide-y divide-foreground/8">
-                      {/* Clone */}
-                      <div className="p-5 space-y-3">
-                        <div>
-                          <p className="text-sm font-medium text-foreground">Clone version</p>
-                          <p className="mt-0.5 text-xs text-foreground/50">
-                            Creates a new unpublished copy of the selected version.
-                          </p>
-                        </div>
-                        <div className="flex flex-wrap items-end gap-3">
-                          <div className="flex-1 min-w-[160px]">
-                            <label htmlFor="clone-name" className={labelClass}>
-                              New version name{' '}
-                              <span className="font-normal text-foreground/50">(optional)</span>
-                            </label>
-                            <input
-                              id="clone-name"
-                              type="text"
-                              value={cloneName}
-                              onChange={(e) => setCloneName(e.target.value)}
-                              disabled={isActionBusy}
-                              maxLength={50}
-                              placeholder="v2.0-draft"
-                              className={inputClass}
-                            />
-                          </div>
-                          <AdminButton
-                            variant="ghost"
-                            onClick={handleClone}
-                            disabled={isActionBusy}
-                            className="px-4 py-2"
-                          >
-                            {isCloning ? 'Cloning…' : 'Clone'}
-                          </AdminButton>
-                        </div>
-                        {cloneError && (
-                          <p className="text-xs text-red-600 dark:text-red-400">{cloneError}</p>
-                        )}
-                      </div>
-
-                      {/* Publish */}
-                      <div className="p-5 space-y-3">
-                        <div>
-                          <p className="text-sm font-medium text-foreground">Publish version</p>
-                          <p className="mt-0.5 text-xs text-foreground/50">
-                            Activates this version for the public site (name and font). Unpublishes
-                            all other versions. Stored colours are not applied to the live site.
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <AdminButton
-                            onClick={handlePublish}
-                            disabled={isActionBusy || selectedItem.isPublished}
-                            className="bg-emerald-600 px-4 py-2 hover:bg-emerald-700"
-                          >
-                            {isPublishing ? 'Publishing…' : 'Publish'}
-                          </AdminButton>
-                          {selectedItem.isPublished && (
-                            <span className="text-xs text-foreground/50">
-                              This version is already published.
+          <div className="grid grid-cols-1 gap-6 xl:grid-cols-[320px_1fr]">
+            <div className="space-y-3">
+              <AdminSection title="Theme library" description="Select a theme to edit its draft.">
+                <AdminCard className="p-3 space-y-2">
+                  {themesLoading ? (
+                    <p className="px-2 py-3 text-sm text-foreground/50">Loading themes…</p>
+                  ) : !themes?.length ? (
+                    <p className="px-2 py-3 text-sm text-foreground/50">No themes yet. Create one below.</p>
+                  ) : (
+                    themes.map((t) => (
+                      <button
+                        key={t.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedThemeId(t.id);
+                          setDraftError(null);
+                          setDraftFieldErrors({});
+                        }}
+                        className={[
+                          'w-full rounded-lg border px-4 py-3 text-left transition',
+                          selectedThemeId === t.id
+                            ? 'border-primary/40 bg-primary/5 ring-1 ring-primary/20'
+                            : 'border-foreground/10 bg-background hover:border-foreground/20 hover:bg-foreground/[0.03]',
+                        ].join(' ')}
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <span className="truncate text-sm font-semibold text-foreground">{t.name}</span>
+                          {t.isPublished && (
+                            <span className="shrink-0 rounded-full bg-status-success/15 px-2 py-0.5 text-xs font-medium text-status-success">
+                              Live
                             </span>
                           )}
                         </div>
+                        <p className="mt-0.5 text-xs text-foreground/45">
+                          {formatMessageDateTime(t.updatedAt)}
+                        </p>
+                      </button>
+                    ))
+                  )}
+                  <div className="border-t border-foreground/8 pt-3 space-y-2 px-1">
+                    <p className="text-xs font-medium text-foreground/70">New theme</p>
+                    <input
+                      type="text"
+                      value={newThemeName}
+                      onChange={(e) => setNewThemeName(e.target.value)}
+                      disabled={busy}
+                      placeholder="Theme name"
+                      className={inputClass}
+                    />
+                    {createError && (
+                      <p className="text-xs text-status-danger">{createError}</p>
+                    )}
+                    <AdminButton type="button" variant="secondary" disabled={busy} onClick={handleCreate}>
+                      {creating ? 'Creating…' : 'Create theme'}
+                    </AdminButton>
+                  </div>
+                </AdminCard>
+              </AdminSection>
+            </div>
+
+            <div className="space-y-6">
+              {selectedThemeId && (
+                <>
+                  <AdminSection
+                    title="Draft editor"
+                    description={
+                      selectedTheme
+                        ? `Editing “${selectedTheme.name}”. Save draft, preview, then publish when ready.`
+                        : undefined
+                    }
+                  >
+                    <AdminCard className="p-5">
+                      {detailLoading || !selectedTheme ? (
+                        <div className="space-y-4 animate-pulse">
+                          {Array.from({ length: 4 }).map((_, i) => (
+                            <div key={i} className="h-9 rounded-lg bg-foreground/8" />
+                          ))}
+                        </div>
+                      ) : (
+                        <ThemeDraftEditor
+                          theme={selectedTheme}
+                          isSaving={savingDraft}
+                          fieldErrors={draftFieldErrors}
+                          generalError={draftError}
+                          onPreviewChange={handlePreviewChange}
+                          onSave={(body) => {
+                            if (!selectedThemeId) return;
+                            saveDraft({ themeId: selectedThemeId, body });
+                          }}
+                        />
+                      )}
+                    </AdminCard>
+                  </AdminSection>
+
+                  <AdminSection
+                    title="Preview"
+                    description="Scoped to this card — shows the current draft tokens, not the live site."
+                  >
+                    <ThemePreviewShell tokens={draftPreview} siteName={siteName || 'Your site'} />
+                  </AdminSection>
+
+                  <AdminSection title="Revisions">
+                    <ThemeRevisionsPanel themeId={selectedThemeId} />
+                  </AdminSection>
+
+                  <AdminSection title="Theme actions">
+                    <AdminCard className="divide-y divide-foreground/8">
+                      <div className="p-5 space-y-3">
+                        <div>
+                          <p className="text-sm font-medium text-foreground">Duplicate theme</p>
+                          <p className="mt-0.5 text-xs text-foreground/50">
+                            Creates a new theme from the selected draft snapshot.
+                          </p>
+                        </div>
+                        <input
+                          type="text"
+                          value={duplicateName}
+                          onChange={(e) => setDuplicateName(e.target.value)}
+                          disabled={busy}
+                          placeholder="Optional name for the copy"
+                          className={inputClass}
+                        />
+                        {dupError && (
+                          <p className="text-xs text-status-danger">{dupError}</p>
+                        )}
+                        <AdminButton type="button" variant="ghost" disabled={busy} onClick={handleDuplicate}>
+                          {duplicating ? 'Duplicating…' : 'Duplicate'}
+                        </AdminButton>
+                      </div>
+                      <div className="p-5 space-y-3">
+                        <div>
+                          <p className="text-sm font-medium text-foreground">Publish theme</p>
+                          <p className="mt-0.5 text-xs text-foreground/50">
+                            Pushes the current draft as the published revision for this theme.
+                          </p>
+                        </div>
+                        <AdminButton
+                          variant="success"
+                          onClick={handlePublish}
+                          disabled={busy}
+                          className="px-4 py-2"
+                        >
+                          {publishing ? 'Publishing…' : 'Publish'}
+                        </AdminButton>
                         {publishError && (
-                          <p className="text-xs text-red-600 dark:text-red-400">{publishError}</p>
+                          <p className="text-xs text-status-danger">{publishError}</p>
                         )}
                       </div>
                     </AdminCard>
                   </AdminSection>
-                )}
-              </>
-            )}
+                </>
+              )}
+            </div>
           </div>
         </div>
       )}

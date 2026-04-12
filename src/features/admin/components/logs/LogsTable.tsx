@@ -33,10 +33,10 @@ export function LogsTable({ items }: Props) {
             <AdminTableCell className="align-top">
               <EntityTypeBadge entityType={item.entityType} />
             </AdminTableCell>
-            <AdminTableCell className="whitespace-nowrap align-top text-white/70">
+            <AdminTableCell className="whitespace-nowrap align-top text-text-secondary">
               {item.user.email}
             </AdminTableCell>
-            <AdminTableCell className="whitespace-nowrap align-top text-white/60">
+            <AdminTableCell className="whitespace-nowrap align-top text-muted">
               {formatActivityLogDateTime(item.createdAt)}
             </AdminTableCell>
           </AdminTableRow>

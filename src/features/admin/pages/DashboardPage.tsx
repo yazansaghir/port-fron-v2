@@ -19,7 +19,7 @@ const TABLE_COLUMNS = ['Project', 'Views', 'Avg Time', 'Last Visited'];
 const TABLE_COLUMN_ALIGN: Array<'left' | 'right'> = ['left', 'right', 'right', 'right'];
 
 const dashboardPanelClass =
-  'rounded-2xl border border-white/10 bg-white/[0.02] p-8 lg:p-10';
+  'rounded-2xl border border-border/60 bg-surface/35 p-8 lg:p-10';
 
 function formatDate(iso: string | null): string {
   if (!iso) return '—';
@@ -63,7 +63,7 @@ export default function DashboardPage() {
       {isError && (
         <div className={dashboardPanelClass}>
           <div className="flex flex-col items-start gap-6">
-            <p className="text-sm text-white/80">
+            <p className="text-sm text-text-secondary">
               {getDisplayMessage(error, 'Failed to load analytics.')}
             </p>
             <AdminButton variant="soft" onClick={() => void refetch()}>
@@ -89,7 +89,7 @@ export default function DashboardPage() {
                 </AdminTableBody>
               </AdminTable>
             ) : data.projectBreakdown.length === 0 ? (
-              <div className="rounded-xl bg-white/[0.03] px-4 py-10">
+              <div className="rounded-xl bg-surface/40 px-4 py-10">
                 <AdminEmptyState
                   title="No project data yet"
                   description="Once visitors view your projects, stats will appear here."
@@ -101,16 +101,16 @@ export default function DashboardPage() {
                 <AdminTableBody>
                   {data.projectBreakdown.map((row) => (
                     <AdminTableRow key={row.project.id}>
-                      <AdminTableCell className="font-medium text-white">
+                      <AdminTableCell className="font-medium text-foreground">
                         {row.project.title}
                       </AdminTableCell>
-                      <AdminTableCell className="text-right tabular-nums text-white/80">
+                      <AdminTableCell className="text-right tabular-nums text-text-secondary">
                         {row.totalViews.toLocaleString()}
                       </AdminTableCell>
-                      <AdminTableCell className="text-right tabular-nums text-white/80">
+                      <AdminTableCell className="text-right tabular-nums text-text-secondary">
                         {formatDwellTime(row.avgTimeSpent)}
                       </AdminTableCell>
-                      <AdminTableCell className="text-right text-white/60">
+                      <AdminTableCell className="text-right text-muted">
                         {formatDate(row.lastVisitedAt)}
                       </AdminTableCell>
                     </AdminTableRow>

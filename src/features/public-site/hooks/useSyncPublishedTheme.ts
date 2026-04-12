@@ -1,25 +1,32 @@
 import { useEffect } from 'react';
 
-import { usePublishedSettings } from '@/features/settings/hooks/usePublishedSettings';
+import { useSiteAppearance } from '@/features/public-site/hooks/useSiteAppearance';
 import {
-  applySiteSettingsToDocument,
-  resetThemeToDefaults,
-} from '@/features/public-site/lib/published-theme';
+  appearanceTokensToNormalized,
+  applyCssVarsToElement,
+  resetManagedThemeVars,
+  semanticTokensToCssVars,
+} from '@/features/public-site/lib/theme-runtime';
 
 export function useSyncPublishedTheme(): void {
-  const { data: settings, isSuccess } = usePublishedSettings({
+  const { data, isSuccess, isError } = useSiteAppearance({
     staleTime: 5 * 60 * 1000,
   });
 
   useEffect(() => {
-    if (isSuccess && settings) {
-      applySiteSettingsToDocument(settings);
+    const root = document.documentElement;
+    if (isSuccess && data) {
+      const normalized = appearanceTokensToNormalized(data.tokens, data.schemaVersion);
+      applyCssVarsToElement(root, semanticTokensToCssVars(normalized));
+    } else if (isError) {
+      const normalized = appearanceTokensToNormalized(null, 0);
+      applyCssVarsToElement(root, semanticTokensToCssVars(normalized));
     }
-  }, [isSuccess, settings]);
+  }, [isSuccess, isError, data]);
 
   useEffect(() => {
     return () => {
-      resetThemeToDefaults();
+      resetManagedThemeVars(document.documentElement);
     };
   }, []);
 }

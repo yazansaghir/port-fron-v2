@@ -119,7 +119,7 @@ export function AssetRow({ asset, projectId }: Props) {
                 </p>
               )}
               {patchAlt.isSuccess && (
-                <p role="status" className="mt-1 text-xs text-emerald-600 dark:text-emerald-400">
+                <p role="status" className="mt-1 text-xs text-status-success">
                   Saved.
                 </p>
               )}
@@ -145,7 +145,7 @@ export function AssetRow({ asset, projectId }: Props) {
                   </p>
                 )}
                 {patchOrder.isSuccess && (
-                  <p role="status" className="mt-1 text-xs text-emerald-600 dark:text-emerald-400">
+                  <p role="status" className="mt-1 text-xs text-status-success">
                     Applied.
                   </p>
                 )}
@@ -179,14 +179,14 @@ export function AssetRow({ asset, projectId }: Props) {
             type="button"
             onClick={() => setShowDeleteConfirm(true)}
             disabled={isBusy}
-            className="rounded-md border border-red-500/30 px-3 py-1.5 text-xs font-medium text-red-600 transition hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-md border border-status-danger/30 px-3 py-1.5 text-xs font-medium text-status-danger transition hover:bg-status-danger/10 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Delete
           </button>
         </div>
 
         {deleteMutation.isError && (
-          <p className="mt-2 text-xs text-red-600 dark:text-red-400">
+          <p className="mt-2 text-xs text-status-danger">
             {getDisplayMessage(deleteMutation.error, 'Failed to delete asset.')}
           </p>
         )}

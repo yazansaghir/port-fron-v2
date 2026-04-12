@@ -42,7 +42,7 @@ export default function AboutPage() {
             description={ABOUT_SUMMARY_SECTION.description}
             density="compact"
           />
-          <div className="relative max-w-4xl overflow-hidden rounded-3xl border border-white/10 bg-[color-mix(in_srgb,var(--color-surface)_72%,transparent)] p-10 shadow-2xl shadow-black/25 backdrop-blur-[20px] md:p-12">
+          <div className="relative max-w-4xl overflow-hidden rounded-3xl border border-border/50 bg-[color-mix(in_srgb,var(--color-surface)_72%,transparent)] p-10 shadow-2xl shadow-[0_25px_80px_-24px_color-mix(in_srgb,var(--color-text)_28%,transparent)] backdrop-blur-[20px] md:p-12">
             <div
               className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"
               aria-hidden

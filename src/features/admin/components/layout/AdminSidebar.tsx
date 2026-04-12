@@ -12,8 +12,8 @@ const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   [
     'flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium',
     isActive
-      ? 'bg-white/[0.08] text-white'
-      : 'text-white/60 hover:bg-white/[0.05] hover:text-white/90',
+      ? 'bg-foreground/10 text-foreground'
+      : 'text-muted hover:bg-foreground/5 hover:text-foreground/90',
   ].join(' ');
 
 function NavLinks({ onLinkClick }: { onLinkClick?: () => void }) {
@@ -38,8 +38,8 @@ function NavLinks({ onLinkClick }: { onLinkClick?: () => void }) {
 function BrandBlock() {
   return (
     <div>
-      <p className="text-xs font-semibold uppercase tracking-widest text-white/60">Admin</p>
-      <div className="mt-3 h-px w-full bg-white/10" aria-hidden />
+      <p className="text-xs font-semibold uppercase tracking-widest text-muted">Admin</p>
+      <div className="mt-3 h-px w-full bg-border/60" aria-hidden />
     </div>
   );
 }
@@ -57,7 +57,7 @@ export function AdminSidebar({ mobileOpen, onClose }: Props) {
   return (
     <>
       <aside
-        className="hidden min-h-screen w-64 shrink-0 flex-col border-r border-white/10 bg-surface md:flex"
+        className="hidden min-h-screen w-64 shrink-0 flex-col border-r border-border/60 bg-surface md:flex"
         aria-label="Admin navigation"
       >
         <div className="flex min-h-0 flex-1 flex-col gap-6 px-4 py-6">
@@ -68,7 +68,7 @@ export function AdminSidebar({ mobileOpen, onClose }: Props) {
 
       <div
         className={[
-          'fixed inset-0 z-20 bg-black/40 transition-opacity duration-200 ease-out md:hidden',
+          'fixed inset-0 z-20 bg-overlay-scrim transition-opacity duration-200 ease-out md:hidden',
           mobileOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0',
         ].join(' ')}
         aria-hidden="true"
@@ -77,7 +77,7 @@ export function AdminSidebar({ mobileOpen, onClose }: Props) {
 
       <aside
         className={[
-          'fixed inset-y-0 left-0 z-30 flex min-h-screen w-64 flex-col border-r border-white/10 bg-surface transition-transform duration-200 ease-out md:hidden',
+          'fixed inset-y-0 left-0 z-30 flex min-h-screen w-64 flex-col border-r border-border/60 bg-surface transition-transform duration-200 ease-out md:hidden',
           mobileOpen ? 'pointer-events-auto translate-x-0' : 'pointer-events-none -translate-x-full',
         ].join(' ')}
         aria-label="Admin navigation"
@@ -86,11 +86,11 @@ export function AdminSidebar({ mobileOpen, onClose }: Props) {
       >
         <div className="flex min-h-0 flex-1 flex-col px-4 py-6">
           <div className="flex items-center justify-between gap-3">
-            <p className="text-xs font-semibold uppercase tracking-widest text-white/60">Admin</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-muted">Admin</p>
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg p-2 text-white/60 hover:bg-white/[0.05] hover:text-white"
+              className="rounded-lg p-2 text-muted hover:bg-foreground/5 hover:text-foreground"
               aria-label="Close navigation"
             >
               <svg
@@ -109,7 +109,7 @@ export function AdminSidebar({ mobileOpen, onClose }: Props) {
               </svg>
             </button>
           </div>
-          <div className="mt-3 h-px w-full shrink-0 bg-white/10" aria-hidden />
+          <div className="mt-3 h-px w-full shrink-0 bg-border/60" aria-hidden />
           <div className="mt-6 flex min-h-0 flex-1 flex-col overflow-y-auto">
             <NavLinks onLinkClick={onClose} />
           </div>
