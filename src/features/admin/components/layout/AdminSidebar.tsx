@@ -57,10 +57,10 @@ export function AdminSidebar({ mobileOpen, onClose }: Props) {
   return (
     <>
       <aside
-        className="hidden min-h-screen w-64 shrink-0 flex-col border-r border-border/60 bg-surface md:flex"
+        className="fixed inset-y-0 left-0 z-10 hidden w-64 flex-col border-r border-border/60 bg-surface md:flex"
         aria-label="Admin navigation"
       >
-        <div className="flex min-h-0 flex-1 flex-col gap-6 px-4 py-6">
+        <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto px-4 py-6">
           <BrandBlock />
           <NavLinks />
         </div>

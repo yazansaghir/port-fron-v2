@@ -41,7 +41,7 @@ export function AdminLayout() {
         mobileOpen={mobileNavOpen}
         onClose={() => setMobileNavOpen(false)}
       />
-      <div className="relative flex min-w-0 flex-1 flex-col bg-background">
+      <div className="relative flex min-w-0 flex-1 flex-col bg-background md:pl-64">
         <AdminHeader
           userEmail={user?.email}
           onLogout={() => logout.mutate()}
